@@ -496,7 +496,7 @@
     "oilPrefab": {
       "__uuid__": "df0948c3-edd4-4658-b145-c0b825bd011c"
     },
-    "oilNumber": 10
+    "oilNumber": 5
   },
   {
     "__type__": "cc.Node",
@@ -869,6 +869,9 @@
     "_enabled": true,
     "nodeBackground": {
       "__id__": 3
+    },
+    "nodeOilLayout": {
+      "__id__": 10
     }
   }
 ]

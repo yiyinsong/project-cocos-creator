@@ -8,10 +8,22 @@ export default class BackgroundSprite extends cc.Component {
     
     //main场景
     public nodeGame: cc.Canvas;
+
+    //是否加速
+    public isAccelerate: boolean = false;
    
 
     public onLoad () {
         
+    }
+
+    public startAccelerate() {
+        this.unschedule(this.accelerateHandler);
+        this.isAccelerate = true;
+        this.scheduleOnce(this.accelerateHandler, 2);
+    }
+    private accelerateHandler() {
+        this.isAccelerate = false;
     }
 
     public update (dt) {
@@ -19,7 +31,11 @@ export default class BackgroundSprite extends cc.Component {
         if(this.node.x < - Math.floor(this.node.width * this.node.scaleX)/2 - canvasWidth) {
             this.node.x = - canvasWidth - this.gameSpeed * dt -1;
         } else {
-            this.node.x -= this.gameSpeed * dt;
+            if(this.isAccelerate) {
+                this.node.x -= this.gameSpeed * dt * 1.5;
+            } else {
+                this.node.x -= this.gameSpeed * dt;
+            }
         }
     }
 }
