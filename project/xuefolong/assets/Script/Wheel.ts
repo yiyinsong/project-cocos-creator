@@ -12,7 +12,7 @@ export default class Wheel extends cc.Component {
         this.node.runAction(rotateAction);
     }
 
-    private setRotationAction() {
+    private setRotationAction(): cc.ActionInterval {
         const wheelRotate = cc.rotateBy(this.rotateDuration, 360);
         return cc.repeatForever(wheelRotate);
     }

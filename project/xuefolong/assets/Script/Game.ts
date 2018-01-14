@@ -5,9 +5,11 @@ const {ccclass, property, executionOrder} = cc._decorator;
 export default class Game extends cc.Component {
     
     @property(cc.Node)
-    nodeBackground: cc.Node = null;
+    nodeBackground: cc.Node = null; 
 
     public onLoad() {
-        this.nodeBackground.getComponent('BackgroundSprite').nodeGame = this;
+        this.nodeBackground.getComponent('Background').nodeGame = this;
     }
+
+    
 }
