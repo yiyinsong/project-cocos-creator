@@ -20,6 +20,7 @@ export default class OilLayout extends cc.Component {
     private oilPool: cc.NodePool;
 
     onLoad() {
+        //初始化对象池，并生成oilNumber个油桶
         this.oilPool = new cc.NodePool('Oil'); 
         
         for (let i = 0; i < this.oilNumber; ++i) {
@@ -27,13 +28,22 @@ export default class OilLayout extends cc.Component {
             this.oilPool.put(oil);
         }
     }
-
+    /**
+     * 生成oilNumber个油桶，放置于当前容器
+     * @method init
+     * @return null
+     */
     public init() {
         for(let i = 0; i< this.oilNumber; ++i) {
             this.createOil(this.node);
         }
     }
-
+    /**
+     * 传入一个父容器/父节点，并获取一个新油桶
+     * @private
+     * @param {any} parentNode 
+     * @return null
+     */
     private createOil(parentNode) {
         let oil = null;
         if (this.oilPool.size() > 0) {
@@ -42,16 +52,27 @@ export default class OilLayout extends cc.Component {
             oil = cc.instantiate(this.oilPrefab);
             oil.addComponent('Oil');
         }
+        oil.parent = parentNode;
         oil.getComponent('Oil').oilLayout = this;
         oil.getComponent('Oil').init(parentNode.width-20, 150, this.oilSpeed);
-        oil.parent = parentNode;
     }
-
+    /**
+     * 传递加速指令
+     * @method accelerate
+     * @param {any} oil 油桶节点
+     * @return nkull
+     */
     public accelerate(oil) {
         this.nodeGame.nodeBackground.getComponent('Background').startAccelerate();
+        this.nodeGame.nodeCar.getChildByName('fire').getComponent('Fire').playAnimation(true);
         this.onOilKilled(oil);
     }
-
+    /**
+     * 回收油桶并生成一个新油桶
+     * @method onOilKilled
+     * @param {any} oil 油桶节点
+     * @return null
+     */
     public onOilKilled(oil) {
         this.oilPool.put(oil);
         this.createOil(this.node);
