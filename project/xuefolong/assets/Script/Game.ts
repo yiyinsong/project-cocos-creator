@@ -33,6 +33,7 @@ export default class Game extends cc.Component {
      * @return null
      */
     public dispatchAccelerateStartEvent() {
+        console.log(1111);
         this.node.dispatchEvent( new cc.Event.EventCustom('accelerateStart', true) );
     }
     /**

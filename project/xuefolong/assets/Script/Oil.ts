@@ -14,9 +14,11 @@ export default class Oil extends cc.Component {
 
     public onLoad() {
         this.node.on('accelerateStart', () => {
+            console.log('start');
             this.isAccelerate = true;
         });
         this.node.on('accelerateEnd', () => {
+            console.log('end');
             this.isAccelerate = false;
         });
     }

@@ -54,7 +54,7 @@ export default class BackgroundSprite extends cc.Component {
         } else if(this.useTime < this.gameTime) {
             let canvasWidth = Math.floor(this.nodeGame.node.width) / 2;
             if(this.node.x < - Math.floor(this.node.width * this.node.scaleX)/2 - canvasWidth) {
-                this.node.x = - canvasWidth - this.gameSpeed * dt -1;
+                this.node.x = - canvasWidth - this.gameSpeed * dt * (this.isAccelerate ? 1.5 : 1) -1;
                 this.useTime ++;
             } else {
                 if(this.isAccelerate) {
