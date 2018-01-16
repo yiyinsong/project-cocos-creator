@@ -35,6 +35,7 @@ export default class OilLayout extends cc.Component {
         this.oilPool = new cc.NodePool('Oil'); 
         for (let i = 0; i < this.oilNumber; ++i) {
             let oil = cc.instantiate(this.oilPrefab);
+            oil.getComponent('Oil').index = i;
             this.oilPool.put(oil);
         }
         for(let i = 0; i< this.oilNumber; ++i) {
