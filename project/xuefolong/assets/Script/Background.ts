@@ -1,66 +1,50 @@
 const {ccclass, property} = cc._decorator;
 
+import GS from './common/GameState';
+
 @ccclass
 export default class BackgroundSprite extends cc.Component {
-    // 游戏背景速度
-    @property
-    public gameSpeed: number = 0;
-    
-    // main场景
-    public nodeGame: any;
 
-    // 控制加速变量
-    public isAccelerate: boolean = false;
+    // 游戏背景速度
+    private speed: number = 0;
+
+    // 加速度
+    private accelerateSpeed: number = 0;
 
     // 屏幕节数，屏幕播放过次数，决定游戏时间长度
-    public gameTime: number = 0;
+    private time: number = 0;
 
     // 当前游戏所经过的节数
     private useTime: number = 0;
 
+    // 场景宽度
+    private sceneWidth: number = 0;
+
    
 
-    public onLoad () {
-        
-    }
-    /**
-     * 定时加速
-     * @method startAccelerate
-     * @return null
-     */
-    public startAccelerate() {
-        this.unschedule(this.accelerateHandler);
-        this.isAccelerate = true;
-        this.scheduleOnce(this.accelerateHandler, 2);
-        this.nodeGame.dispatchAccelerateStartEvent();
-    }
-    /**
-     * 设置加速关闭
-     * @method accelerateHandler
-     * @private
-     * @return null
-     */
-    private accelerateHandler() {
-        this.isAccelerate = false;
-        this.nodeGame.nodeCar.getChildByName('fire').getComponent('Fire').playAnimation(false);
-        this.nodeGame.dispatchAccelerateEndEvent();
+    public init (speed: number, accelerateSpeed: number, time: number, sceneWidth: number) {
+        this.speed = speed;
+        this.time = time;
+        this.accelerateSpeed = accelerateSpeed;
+        this.sceneWidth = sceneWidth;
     }
 
     public update (dt) {
         // 如果游戏结束
-        if(this.useTime == this.gameTime) {
-            let canvasWidth = Math.floor(this.nodeGame.node.width) / 2;
-            
-        } else if(this.useTime < this.gameTime) {
-            let canvasWidth = Math.floor(this.nodeGame.node.width) / 2;
+        if(this.useTime == this.time) {
+            let canvasWidth = Math.floor(this.sceneWidth) / 2;
+            this.node.dispatchEvent(new cc.Event.EventCustom('eventGameOver', true));
+            this.enabled = false;
+        } else if(this.useTime < this.time) {
+            let canvasWidth = Math.floor(this.sceneWidth) / 2;
             if(this.node.x < - Math.floor(this.node.width * this.node.scaleX)/2 - canvasWidth) {
-                this.node.x = - canvasWidth - this.gameSpeed * dt * (this.isAccelerate ? 1.5 : 1) -1;
+                this.node.x = - canvasWidth - this.speed * dt * (GS.isAccelerate ? this.accelerateSpeed : 1) -1;
                 this.useTime ++;
             } else {
-                if(this.isAccelerate) {
-                    this.node.x -= this.gameSpeed * dt * 1.5;
+                if(GS.isAccelerate) {
+                    this.node.x -= this.speed * dt * this.accelerateSpeed;
                 } else {
-                    this.node.x -= this.gameSpeed * dt;
+                    this.node.x -= this.speed * dt;
                 }
             }
         }

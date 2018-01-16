@@ -1,5 +1,6 @@
 const {ccclass, property} = cc._decorator;
 
+import GS from './common/GameState';
 @ccclass
 export default class Oil extends cc.Component {
     
@@ -9,19 +10,8 @@ export default class Oil extends cc.Component {
     // 油桶速度
     private speed: number = 0;
 
-    // 控制是否加速
-    private isAccelerate: boolean = false;
-
-    public onLoad() {
-        this.node.on('accelerateStart', () => {
-            console.log('start');
-            this.isAccelerate = true;
-        });
-        this.node.on('accelerateEnd', () => {
-            console.log('end');
-            this.isAccelerate = false;
-        });
-    }
+    // 加速度
+    private accelerateSpeed: number = 0;
 
     /**
      * 初始化单个油桶
@@ -30,23 +20,20 @@ export default class Oil extends cc.Component {
      * @param {number} speed 油桶速度
      * @return null
      */
-    public init(w: number, h: number, speed: number) {
+    public init(w: number, h: number, speed: number, accelerateSpeed: number) {
         this.node.scale = 0.3 + cc.random0To1() * 0.6;
         this.node.x = cc.random0To1() * w + w;
         this.node.y = cc.random0To1() * h;
         this.speed = speed;
+        this.accelerateSpeed = accelerateSpeed;
     }
 
-    public startAccelerate(b: boolean) {
-        this.isAccelerate = b;
-    }
-
-    update (dt) {
+    public update (dt) {
         if(this.node.x < -this.node.width*this.node.scaleX) {
             this.oilLayout.onOilKilled(this.node);
         } else {
-            if(this.isAccelerate) {
-                this.node.x -= this.speed * dt * 1.5;
+            if(GS.isAccelerate) {
+                this.node.x -= this.speed * dt * this.accelerateSpeed;
             } else {
                 this.node.x -= this.speed * dt;
             }
@@ -75,6 +62,9 @@ export default class Oil extends cc.Component {
      * @return null
      */
     private onSelect() {
-        this.oilLayout.accelerate(this.node);
+        // 发送加速指令到Game
+        this.node.dispatchEvent(new cc.Event.EventCustom('eventAccelerateStart', true));
+        // 回收油桶
+        this.oilLayout.onOilKilled(this.node);
     }
 }
