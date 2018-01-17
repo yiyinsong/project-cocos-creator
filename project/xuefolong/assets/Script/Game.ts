@@ -41,10 +41,11 @@ export default class Game extends cc.Component {
         this.node.on('eventGameOver', this.gameOverFn.bind(this));
 
         GS.game = this;
+        GS.duration = this.time;
 
         // 把主场景赋予背景节点
         const _background = this.nodeBackground.getComponent('Background');
-        _background.init(this.speed, this.accelerateSpeed, this.time, this.node.width);
+        _background.init(this.speed, this.accelerateSpeed, this.node.width);
         // 把主场景赋予油桶容器节点，初始化油桶
         const _oilLayout = this.nodeOilLayout.getComponent('OilLayout');
         _oilLayout.init(this.speed, this.accelerateSpeed, this.oilNumber);

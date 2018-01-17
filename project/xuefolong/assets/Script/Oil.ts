@@ -3,6 +3,9 @@ const {ccclass, property} = cc._decorator;
 import GS from './common/GameState';
 @ccclass
 export default class Oil extends cc.Component {
+
+    @property(cc.AudioClip)
+    public touchAudio: cc.AudioClip = null;
     
     // 记录当前节点父容器
     public oilLayout: any;
@@ -32,9 +35,6 @@ export default class Oil extends cc.Component {
     }
 
     public update (dt) {
-        if(GS.over) {
-            this.node.active = false;
-        }
         if(this.node.x < -this.node.width*this.node.scaleX) {
             this.oilLayout.onOilKilled(this.node);
         } else {
@@ -70,6 +70,8 @@ export default class Oil extends cc.Component {
     private onSelect() {
         // 发送加速指令到Game
         this.node.dispatchEvent(new cc.Event.EventCustom('eventAccelerateStart', true));
+        // 播放声音
+        cc.audioEngine.play(this.touchAudio, false, 1);
         // 回收油桶
         this.oilLayout.onOilKilled(this.node);
     }

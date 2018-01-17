@@ -68,6 +68,6 @@ export default class OilLayout extends cc.Component {
      */
     public onOilKilled(oil) {
         this.oilPool.put(oil);
-        !GS.over && this.createOil(this.node);
+        (GS.useTime < GS.duration) && this.createOil(this.node);
     }
 }

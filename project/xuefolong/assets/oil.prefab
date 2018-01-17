@@ -96,7 +96,10 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": true
+    "_enabled": true,
+    "touchAudio": {
+      "__uuid__": "65c81412-20c6-4a61-8d37-25e58ef9c763"
+    }
   },
   {
     "__type__": "cc.PrefabInfo",
